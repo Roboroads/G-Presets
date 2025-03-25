@@ -160,7 +160,7 @@ public class GPresetImporter {
                 needVariableIds.remove(id);
             }
 
-            if(needVariableIds.size() == 0) {
+            if(needVariableIds.isEmpty()) {
                 wiredVariableConfirmation.release();
             }
 
@@ -198,7 +198,7 @@ public class GPresetImporter {
                         item.getTile().getX(), item.getTile().getY(), item.getTypeId());
 
                 LinkedList<Integer> awaitMatchingDropIds = expectFurniDrops.get(dropKey);
-                if (awaitMatchingDropIds != null && awaitMatchingDropIds.size() > 0) {
+                if (awaitMatchingDropIds != null && !awaitMatchingDropIds.isEmpty()) {
                     int assignedFurniId = awaitMatchingDropIds.pollFirst();
                     realFurniIdMap.put(assignedFurniId, item.getId());
 
@@ -209,7 +209,7 @@ public class GPresetImporter {
 //                        }
 //                    }
 
-                    if (awaitMatchingDropIds.size() == 0) {
+                    if (awaitMatchingDropIds.isEmpty()) {
                         expectFurniDrops.remove(dropKey);
                     }
                 }
@@ -649,12 +649,12 @@ public class GPresetImporter {
         wiredSaveConfirmation.drainPermits();
         wiredVariableConfirmation.drainPermits();
 
-        if (presetWired.getVariableIds() != null && presetWired.getVariableIds().size() > 0) {
+        if (presetWired.getVariableIds() != null && !presetWired.getVariableIds().isEmpty()) {
             needVariableIds.clear();
             needVariableIds.addAll(presetWired.getVariableIds());
             needVariableIds = needVariableIds.stream().filter(id -> id.equals("0") && realVariableIdMap.keySet().stream().noneMatch(x -> x.equals(id))).collect(Collectors.toList());
 
-            if(needVariableIds.size() > 0) {
+            if(!needVariableIds.isEmpty()) {
                 extension.sendToServer(new HPacket("WiredGetAllVariablesDiffs", HMessage.Direction.TOSERVER, 0));
                 boolean gotVariableConfirmation = false;
                 try { gotVariableConfirmation = wiredVariableConfirmation.tryAcquire(5, TimeUnit.SECONDS);
